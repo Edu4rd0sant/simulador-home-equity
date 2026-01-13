@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulação V3.4 - Primus Bank</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    
+    // SEU PIXEL:
+    fbq('init', 'seu_pixel_aqui'); 
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1164994997943605&ev=PageView&noscript=1"
+    /></noscript>
+    <style>
+        /* --- ESTILOS VISUAIS --- */
+        :root {
+            --primary-color: #041730;     
+            --primary-dark: #ff1010;      
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --bg-page: #0433929c;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 10px 40px -10px rgba(0,0,0,0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-dark);
+        }
+
+        .logo-area {
+            margin-bottom: 25px;
+            text-align: center;
+            width: 100%;
+        }
+        .logo-area img {
+            max-height: 150px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .simulator-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 33%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+        p.subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .input-group { margin-bottom: 20px; }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .disclaimer-text {
+            font-size: 0.75rem;
+            color: #d97706; 
+            margin-top: -5px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-dark);
+            background-color: #fff;
+            transition: all 0.3s ease;
+            appearance: none;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(4, 23, 48, 0.1);
+        }
+
+        .range-box {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        .money-display {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid #d1d5db;
+            color: var(--text-light);
+        }
+
+        /* Estilo extra para o container condicional */
+        .conditional-fields {
+            display: none; /* Começa oculto */
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step { display: none; }
+        .step.active {
+            display: block;
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .simulator-card { padding: 30px 20px; }
+            h2 { font-size: 1.3rem; }
+            .logo-area img { max-height: 80px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo-area">
+        <img src="primuslogo.png" alt="Primus Bank">
+    </div>
+
+    <div class="simulator-card">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <form id="leadForm" onsubmit="return false;">
+            
+            <div class="step active" id="step1">
+                <h2>Simule seu Crédito</h2>
+                <p class="subtitle">Ajuste os valores para começar</p>
+
+                <div class="input-group">
+                    <label>Valor aproximado do imóvel (Garantia)</label>
+                    <div class="range-box">
+                        <span class="money-display" id="displayImovel">R$ 300.000</span>
+                        <input type="range" id="inputImovel" min="50000" max="5000000" step="10000" value="300000">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>De quanto crédito você precisa?</label>
+                    <span class="disclaimer-text">ℹ️ Liberamos até 60% do valor do imóvel</span>
+                    
+                    <div class="range-box">
+                        <span class="money-display" id="displayCredito">R$ 100.000</span>
+                        <input type="range" id="inputCredito" min="30000" max="180000" step="5000" value="100000">
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button type="button" class="btn btn-primary" onclick="changeStep(2)">Continuar</button>
+                </div>
+            </div>
+
+            <div class="step" id="step2">
+                <h2>Detalhes do Imóvel</h2>
+                <p class="subtitle">Conte um pouco sobre a garantia</p>
+
+                <div class="input-group">
+                    <label>Tipo do imóvel</label>
+                    <select id="tipoImovel">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="Casa de rua">Casa de rua</option>
+                        <option value="Casa em condomínio">Casa em condomínio</option>
+                        <option value="Apartamento">Apartamento</option>
+                        <option value="Casa comercial">Casa comercial</option>
+                        <option value="Prédio comercial">Prédio comercial</option>
+                        <option value="Sala comercial">Sala comercial</option>
+                        <option value="Terreno em condomínio">Terreno em condomínio</option>
+                        <option value="Terreno em via pública">Terreno em via pública</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>O imóvel está quitado?</label>
+                    <select id="imovelQuitado">
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <div class="conditional-fields" id="camposSaldoDevedor">
+                    <div class="input-group">
+                        <label>Qual o valor do saldo devedor?</label>
+                        <input type="tel" id="saldoDevedor" placeholder="R$ 0,00" oninput="mascaraMoeda(this)">
+                    </div>
+                    <div class="input-group">
+                        <label>Qual a Instituição Financeira?</label>
+                        <input type="text" id="bancoFinanciador" placeholder="Ex: Caixa, Bradesco, Itaú...">
+                    </div>
+                </div>
+                <div class="input-group" style="display: flex; gap: 15px;">
+                    <div style="flex: 1;">
+                        <label>Estado</label>
+                        <select id="estado">
+                            <option value="">UF</option>
+                            <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option><option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2;">
+                        <label>Cidade</label>
+                        <input type="text" id="cidade" placeholder="Ex: Maceió">
+                    </div>
+                </div>
+
+                <div class="btn-row">
+                    <button type="button" class="btn btn-outline" onclick="changeStep(1)">Voltar</button>
+                    <button type="button" class="btn btn-primary" onclick="changeStep(3)">Continuar</button>
+                </div>
+            </div>
+
+            <div class="step" id="step3">
+                <h2>Receber Análise</h2>
+                <p class="subtitle">Preencha para falar com um especialista</p>
+
+                <div class="input-group">
+                    <label>Nome Completo</label>
+                    <input type="text" id="nome" placeholder="Seu nome">
+                </div>
+
+                <div class="input-group">
+                    <label>Telefone / WhatsApp</label>
+                    <input type="tel" id="whatsapp" placeholder="(DDD) 99999-9999" maxlength="15">
+                </div>
+
+                <div class="input-group">
+                    <label>E-mail</label>
+                    <input type="email" id="email" placeholder="seu@email.com">
+                </div>
+
+                <div class="btn-row">
+                    <button type="button" class="btn btn-outline" onclick="changeStep(2)">Voltar</button>
+                    <button type="button" class="btn btn-primary" id="btnEnviar" onclick="enviarDados()">
+                        Solicitar Análise Gratuita
+                    </button>
+                </div>
+                
+                <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: #9ca3af;">
+                    <small>Seus dados estão seguros conosco.</small>
+                </p>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        const NUMERO_WHATSAPP_EMPRESA = "55999999999"; 
+        const API_URL = "https://api.suaempresa.com.br/api/leads_capture.php";
+
+        // --- LÓGICA DO SIMULADOR (60%) ---
+        function atualizarSimulador() {
+            let inputImovel = document.getElementById('inputImovel');
+            let inputCredito = document.getElementById('inputCredito');
+            let valImovel = parseFloat(inputImovel.value);
+            let valCredito = parseFloat(inputCredito.value);
+            let tetoMaximoCredito = valImovel * 0.60;
+            
+            inputCredito.max = tetoMaximoCredito;
+            if (valCredito > tetoMaximoCredito) {
+                valCredito = tetoMaximoCredito;
+                inputCredito.value = tetoMaximoCredito; 
+            }
+
+            document.getElementById('displayImovel').innerText = valImovel.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            document.getElementById('displayCredito').innerText = valCredito.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+        }
+
+        // --- NAVEGAÇÃO E VALIDAÇÃO ---
+        function changeStep(stepNumber) {
+            // Validação da Etapa 2
+            if(stepNumber === 3) {
+                let tipo = document.getElementById('tipoImovel').value;
+                let quitado = document.getElementById('imovelQuitado').value;
+                
+                if(!tipo || !quitado) {
+                    alert("Por favor, selecione o tipo do imóvel e se está quitado.");
+                    return;
+                }
+
+                // Se não for quitado, exige os campos extras
+                if(quitado === 'Não') {
+                    let saldo = document.getElementById('saldoDevedor').value;
+                    let banco = document.getElementById('bancoFinanciador').value;
+                    if(!saldo || !banco) {
+                        alert("Por favor, informe o saldo devedor e o banco financiador.");
+                        return;
+                    }
+                }
+            }
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('step' + stepNumber).classList.add('active');
+            let fill = (stepNumber / 3) * 100;
+            document.getElementById('progressBar').style.width = fill + '%';
+        }
+
+        // --- MÁSCARAS ---
+        function mascaraTelefone(valor) {
+            valor = valor.replace(/\D/g, ""); 
+            valor = valor.replace(/^(\d{2})(\d)/g, "($1) $2"); 
+            valor = valor.replace(/(\d)(\d{4})$/, "$1-$2");    
+            return valor;
+        }
+
+        function mascaraMoeda(i) {
+            var v = i.value.replace(/\D/g,'');
+            v = (v/100).toFixed(2) + '';
+            v = v.replace(".", ",");
+            v = v.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            i.value = 'R$ ' + v;
+        }
+
+        function formatarMoedaSimples(valor) {
+            return parseFloat(valor).toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // --- ENVIO ---
+        async function enviarDados() {
+            const btn = document.getElementById('btnEnviar');
+            const nome = document.getElementById('nome').value;
+            const whats = document.getElementById('whatsapp').value;
+            const email = document.getElementById('email').value;
+
+            if(!nome || whats.length < 14 || !email.includes('@')) {
+                alert("Por favor, preencha o nome, um telefone válido e um e-mail correto.");
+                return;
+            }
+
+            btn.innerText = "Enviando...";
+            btn.disabled = true;
+
+            // Dispara Pixel
+            if (typeof fbq === 'function') fbq('track', 'Lead');
+
+            // Prepara dados condicionais
+            let statusQuitado = document.getElementById('imovelQuitado').value;
+            let saldoFinal = "0,00";
+            let bancoFinal = "";
+
+            if(statusQuitado === 'Não') {
+                saldoFinal = document.getElementById('saldoDevedor').value;
+                bancoFinal = document.getElementById('bancoFinanciador').value;
+            }
+
+            const payload = {
+                valor_credito: formatarMoedaSimples(document.getElementById('inputCredito').value),
+                valor_imovel: formatarMoedaSimples(document.getElementById('inputImovel').value),
+                tipo_imovel: document.getElementById('tipoImovel').value,
+                estado: document.getElementById('estado').value,
+                cidade: document.getElementById('cidade').value,
+                quitado: statusQuitado,
+                nome: nome,
+                telefone: whats,
+                email: email,
+                saldo_devedor: saldoFinal, 
+                instituicao_financeira: bancoFinal 
+            };
+
+            try {
+                // Envio API
+                await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Envio WhatsApp
+                let msg = `*🟢 NOVA SIMULAÇÃO (SITE PRIMUS)*\n\n`;
+                msg += `👤 *Cliente:* ${payload.nome}\n`;
+                msg += `📱 *Contato:* ${payload.telefone}\n`;
+                msg += `📧 *Email:* ${payload.email}\n\n`;
+                msg += `----------------------------\n`;
+                msg += `💰 *Solicitado:* R$ ${payload.valor_credito}\n`;
+                msg += `🏠 *Garantia:* R$ ${payload.valor_imovel}\n`;
+                msg += `🏢 *Tipo:* ${payload.tipo_imovel}\n`;
+                msg += `📍 *Local:* ${payload.cidade}/${payload.estado}\n`;
+                msg += `✅ *Quitado:* ${payload.quitado}`;
+                
+                if(payload.quitado === 'Não') {
+                    msg += `\n🏦 *Banco:* ${payload.instituicao_financeira}`;
+                    msg += `\n📉 *Saldo Devedor:* ${payload.saldo_devedor}`;
+                }
+
+                window.open(`https://wa.me/${NUMERO_WHATSAPP_EMPRESA}?text=${encodeURIComponent(msg)}`, '_blank');
+                
+                setTimeout(() => {
+                    window.location.href = 'obrigado.html';
+                }, 1000);
+
+            } catch (erro) {
+                console.error("Erro:", erro);
+                alert("Erro ao conectar. Redirecionando para WhatsApp...");
+                window.location.href = `https://wa.me/${NUMERO_WHATSAPP_EMPRESA}`;
+            }
+        }
+
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener("DOMContentLoaded", function() {
+            atualizarSimulador(); 
+            
+            // Listeners Sliders
+            document.getElementById('inputImovel').addEventListener('input', atualizarSimulador);
+            document.getElementById('inputCredito').addEventListener('input', atualizarSimulador);
+            
+            // Listener Contato
+            document.getElementById('whatsapp').addEventListener('input', function(e) {
+                e.target.value = mascaraTelefone(e.target.value);
+            });
+            document.getElementById('email').addEventListener('input', function(e) {
+                e.target.value = e.target.value.toLowerCase().replace(/\s/g, '');
+            });
+
+            // Listener Condicional (Quitado Sim/Não)
+            document.getElementById('imovelQuitado').addEventListener('change', function() {
+                let divExtras = document.getElementById('camposSaldoDevedor');
+                if(this.value === 'Não') {
+                    divExtras.style.display = 'block';
+                } else {
+                    divExtras.style.display = 'none';
+                    document.getElementById('saldoDevedor').value = ''; 
+                    document.getElementById('bancoFinanciador').value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
